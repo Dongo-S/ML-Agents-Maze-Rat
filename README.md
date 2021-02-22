@@ -1,6 +1,4 @@
-# # ML-Agents-Maze-Rat
-
-Foobar is a Python library for dealing with word pluralization.
+# ML-Agents-Maze-Rat
 
 ## Usage
 
