@@ -24,7 +24,7 @@ public class Generator : MonoBehaviour {
 	GameObject tempWall;
 	[SerializeField][Range(2, 10)]int row , column;
 
-	int previousRow, previousColumn;
+	int previousRow = 0, previousColumn = 0;
 	private float wallLength = 1.0f;
 	private Vector3 startPosition;
 	private int currentCell = 0;
@@ -47,7 +47,6 @@ public class Generator : MonoBehaviour {
 		initialPosition = transform.position;
     }
 
-	[ContextMenu("Resize Ground")]
 	void ChangeGroundSize()
     {
 		float xScale = (float)row * scale;
@@ -70,6 +69,8 @@ public class Generator : MonoBehaviour {
 	{
 		//Finding the parent object of the walls if exists
 		destruyendo = 0;
+		initialPosition = transform.position;
+
 		try
 		{
 			//row = int.Parse(RowInput.text);
@@ -102,6 +103,7 @@ public class Generator : MonoBehaviour {
 			Debug.Log(e);
 		}
 	}
+
 	/// <summary>
 	/// Creating wall gameobject based on rows and columns given
 	/// </summary>

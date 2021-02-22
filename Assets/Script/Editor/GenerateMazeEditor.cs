@@ -7,9 +7,13 @@ using UnityEditor;
 public class SomeScriptEditor : Editor
 {
     public override void OnInspectorGUI()
-    {
-        DrawDefaultInspector();
+    { 
+        
         Generator scriptTarget = (Generator)target;
+
+
+        DrawDefaultInspector();
+     
 
         if (GUILayout.Button("Generate Maze"))
         {
