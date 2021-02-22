@@ -4,6 +4,12 @@
 [Bb]uild/
 [Bb]uilds/
 [Ll]ogs/
+#ML-Agents folders and others
+venv/
+results/
+Assets/Plugins/
+Assets/Plugins.meta
+
 
 # Uncomment this line if you wish to ignore the asset store tools plugin
 # [Aa]ssets/AssetStoreTools*
