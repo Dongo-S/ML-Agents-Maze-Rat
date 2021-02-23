@@ -4,21 +4,41 @@ using UnityEditor;
 
 
 [CustomEditor(typeof(Generator))]
-public class SomeScriptEditor : Editor
+[CanEditMultipleObjects]
+public class GenerateMazeEditor : Editor
 {
+
+    private Generator[] scriptTargets;
+
+
+    private void OnEnable()
+    {
+
+        Object[] monoObjects = targets;
+        scriptTargets = new Generator[monoObjects.Length];
+        for (int i = 0; i < monoObjects.Length; i++)
+        {
+            scriptTargets[i] = monoObjects[i] as Generator;
+        }
+    }
+
+
     public override void OnInspectorGUI()
     { 
-        
-        Generator scriptTarget = (Generator)target;
-
-
         DrawDefaultInspector();
      
 
         if (GUILayout.Button("Generate Maze"))
         {
-            scriptTarget.GenerateNewMaze();
+            for (int i = 0; i < scriptTargets.Length; i++)
+            {
+                scriptTargets[i].GenerateNewMaze();
+            }
         }
-       
+
+            serializedObject.ApplyModifiedProperties();
+
+        
+
     }
 }
