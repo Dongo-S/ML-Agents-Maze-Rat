@@ -6,6 +6,8 @@ TagManager:
   tags:
   - ground
   - Walls
+  - Goals
+  - Tramps
   layers:
   - Default
   - TransparentFX
@@ -13,7 +15,7 @@ TagManager:
   - 
   - Water
   - UI
-  - 
+  - GoalLayer
   - 
   - 
   - 

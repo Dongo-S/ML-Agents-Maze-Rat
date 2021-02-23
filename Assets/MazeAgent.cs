@@ -14,32 +14,38 @@ public class MazeAgent : Agent
 
     public Material winMaterial;
     public Material loseMaterial;
+    public Material loseTimeMaterial;
     Material original;
     public Renderer floorRenderer;
     [SerializeField] Generator mazeGenerator;
-    [SerializeField] GameObject goal;
+    [SerializeField] Vector3 goalPosition;
 
+    float rewardPenalty;
 
+        private void Start()
+    {
+        rewardPenalty = 1f / MaxStep;
+    }
 
     public override void OnEpisodeBegin()
     {
         mazeGenerator.GenerateNewMaze();
 
 
-
+        Vector2 randomV = Random.insideUnitCircle;
         //transform.localPosition = Vector3.zero;
-        transform.localPosition = mazeGenerator.startDummie.transform.localPosition;
+        transform.localPosition = mazeGenerator.startDummie.transform.localPosition + new Vector3(randomV.x, 0f, randomV.y);
+        randomV = Random.insideUnitCircle;
+        goalPosition = mazeGenerator.endDummie.transform.localPosition + new Vector3(randomV.x, 0f, randomV.y);
+        mazeGenerator.endDummie.transform.localPosition = goalPosition;
         //targetTransform.localPosition = new Vector3(Random.Range(0f, 9f), 1.5f, Random.Range(-9f, 9f));
     }
-
-
-
 
     public override void CollectObservations(VectorSensor sensor)
     {
         sensor.AddObservation(transform.localPosition);
-        sensor.AddObservation(mazeGenerator.endDummie.transform.localPosition);
-        sensor.AddObservation(transform.rotation);
+        sensor.AddObservation(goalPosition);
+        sensor.AddObservation(transform.rotation.y);
         //sensor.AddObservation(targetTransform.transform.localPosition);
     }
 
@@ -52,10 +58,13 @@ public class MazeAgent : Agent
         float moveZ = actions.ContinuousActions[1];
         float rotation = actions.ContinuousActions[2];
 
+        AddReward(-rewardPenalty);
 
         if (StepCount == MaxStep - 1)
         {
+            SetReward(-1f);
             floorRenderer.material = loseMaterial;
+            EndEpisode();
         }
 
         if ((gameObject.transform.rotation.y < 0.25f && rotation > 0f) ||
@@ -76,13 +85,13 @@ public class MazeAgent : Agent
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.TryGetComponent<Goal>(out Goal goal))
+        if (other.TryGetComponent(out Goal goal))
         {
             SetReward(1f);
             floorRenderer.material = winMaterial;
             EndEpisode();
         }
-        if (other.TryGetComponent<Wall>(out Wall wall))
+        if (other.TryGetComponent(out Wall wall))
         {
             SetReward(-1f);
             floorRenderer.material = loseMaterial;

@@ -23,7 +23,7 @@ behaviors:
         gamma: 0.85
         strength: 0.6
     keep_checkpoints: 5
-    max_steps: 1000000
+    max_steps: 10000000
     time_horizon: 1000
     summary_freq: 12000
     threaded: true

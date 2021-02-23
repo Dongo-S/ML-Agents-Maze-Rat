@@ -51,6 +51,11 @@ public class Generator : MonoBehaviour
         initialPosition = transform.position;
     }
 
+    public bool CheckPreviousSize()
+    {
+        return (previousColumn != column || previousRow != row);
+    }
+
     public void ChangeGroundSize()
     {
         float xScale = (float)row * scale;
@@ -71,7 +76,7 @@ public class Generator : MonoBehaviour
         groundObject.transform.localScale = new Vector3(xScale, groundObject.transform.localScale.y, zScale);
     }
 
-    //[ContextMenu("Generar Laberinto")]
+    [ContextMenu("Generar Laberinto")]
     public void GenerateNewMaze()
     {
 
@@ -127,7 +132,7 @@ public class Generator : MonoBehaviour
         Vector3 myPos = startPosition;
 
 
-        if (wallHolder.transform.childCount == 0 || previousColumn != column || previousRow != row)
+        if (wallHolder.transform.childCount == 0 || CheckPreviousSize())
         {
 
             //Destruimos lo anterior
