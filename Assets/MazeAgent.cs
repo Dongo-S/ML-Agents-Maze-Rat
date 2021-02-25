@@ -15,21 +15,29 @@ public class MazeAgent : Agent
     public Material winMaterial;
     public Material loseMaterial;
     public Material loseTimeMaterial;
-    Material original;
+    public Material CheckPointMaterial;
+    Material originalMaterial;
     public Renderer floorRenderer;
     [SerializeField] Generator mazeGenerator;
     [SerializeField] Vector3 goalPosition;
+    public bool regenerateMaze = true;
 
+    Vector2 initialGoalPosition;
     float rewardPenalty;
 
-        private void Start()
+    Rigidbody m_AgentRb;
+
+    private void Start()
     {
         rewardPenalty = 1f / MaxStep;
+
+        m_AgentRb = GetComponent<Rigidbody>();
     }
 
     public override void OnEpisodeBegin()
     {
-        mazeGenerator.GenerateNewMaze();
+        if (regenerateMaze)
+            mazeGenerator.GenerateNewMaze();
 
 
         Vector2 randomV = Random.insideUnitCircle;
@@ -37,7 +45,7 @@ public class MazeAgent : Agent
         transform.localPosition = mazeGenerator.startDummie.transform.localPosition + new Vector3(randomV.x, 0f, randomV.y);
         randomV = Random.insideUnitCircle;
         goalPosition = mazeGenerator.endDummie.transform.localPosition + new Vector3(randomV.x, 0f, randomV.y);
-        mazeGenerator.endDummie.transform.localPosition = goalPosition;
+        //mazeGenerator.endDummie.transform.localPosition = goalPosition;
         //targetTransform.localPosition = new Vector3(Random.Range(0f, 9f), 1.5f, Random.Range(-9f, 9f));
     }
 
@@ -45,7 +53,8 @@ public class MazeAgent : Agent
     {
         sensor.AddObservation(transform.localPosition);
         sensor.AddObservation(goalPosition);
-        sensor.AddObservation(transform.rotation.y);
+        sensor.AddObservation(transform.InverseTransformDirection(m_AgentRb.velocity));
+
         //sensor.AddObservation(targetTransform.transform.localPosition);
     }
 
@@ -54,49 +63,109 @@ public class MazeAgent : Agent
     {
         //Debug.Log(actions.DiscreteActions[0]);
 
-        float moveX = actions.ContinuousActions[0];
-        float moveZ = actions.ContinuousActions[1];
-        float rotation = actions.ContinuousActions[2];
+        //float moveX = actions.ContinuousActions[0];
+        //float moveZ = actions.ContinuousActions[1];
+        //float rotation = actions.ContinuousActions[2];
 
         AddReward(-rewardPenalty);
 
         if (StepCount == MaxStep - 1)
         {
-            SetReward(-1f);
-            floorRenderer.material = loseMaterial;
-            EndEpisode();
+            //SetReward(-1f);
+            floorRenderer.material = loseTimeMaterial;
+            //EndEpisode();
         }
 
-        if ((gameObject.transform.rotation.y < 0.25f && rotation > 0f) ||
-        (gameObject.transform.rotation.y > -0.25f && rotation < 0f))
-        {
-            gameObject.transform.Rotate(new Vector3(0, 1, 0), rotation);
-        }
-
-        transform.localPosition += new Vector3(moveX, 0f, moveZ) * Time.deltaTime * moveSpeed;
+        MoveAgent(actions.DiscreteActions);
     }
 
     public override void Heuristic(in ActionBuffers actionsOut)
     {
-        ActionSegment<float> continuousAction = actionsOut.ContinuousActions;
-        continuousAction[0] = Input.GetAxisRaw("Horizontal");
-        continuousAction[1] = Input.GetAxisRaw("Vertical");
+        var discreteActionsOut = actionsOut.DiscreteActions;
+        discreteActionsOut[0] = 0;
+        if (Input.GetKey(KeyCode.D))
+        {
+            discreteActionsOut[0] = 3;
+        }
+        else if (Input.GetKey(KeyCode.W))
+        {
+            discreteActionsOut[0] = 1;
+        }
+        else if (Input.GetKey(KeyCode.A))
+        {
+            discreteActionsOut[0] = 4;
+        }
+        else if (Input.GetKey(KeyCode.S))
+        {
+            discreteActionsOut[0] = 2;
+        }
     }
 
+
+    IEnumerator GoalScoredSwapGroundMaterial(Material mat, float time)
+    {
+        originalMaterial = floorRenderer.material;
+        floorRenderer.material = mat;
+        yield return new WaitForSeconds(time); //wait for 2 sec
+        floorRenderer.material = originalMaterial;
+    }
+
+
+    public void MoveAgent(ActionSegment<int> act)
+    {
+        var dirToGo = Vector3.zero;
+        var rotateDir = Vector3.zero;
+
+        var action = act[0];
+        switch (action)
+        {
+            case 1:
+                dirToGo = transform.forward * 1f;
+                break;
+            case 2:
+                dirToGo = transform.forward * -1f;
+                break;
+            case 3:
+                rotateDir = transform.up * 1f;
+                break;
+            case 4:
+                rotateDir = transform.up * -1f;
+                break;
+        }
+        transform.Rotate(rotateDir, Time.deltaTime * 100f);
+        m_AgentRb.AddForce(dirToGo, ForceMode.VelocityChange);
+    }
     private void OnTriggerEnter(Collider other)
     {
         if (other.TryGetComponent(out Goal goal))
         {
-            SetReward(1f);
-            floorRenderer.material = winMaterial;
-            EndEpisode();
+            switch (goal.value)
+            {
+                case ValueCheckpoint.Checkpoint:
+                    other.gameObject.SetActive(false);
+                    AddReward(rewardPenalty);
+                    StartCoroutine(GoalScoredSwapGroundMaterial(CheckPointMaterial, 0.2f));
+                    break;
+                case ValueCheckpoint.Goal:
+                    SetReward(2f);
+                    floorRenderer.material = winMaterial;
+                    EndEpisode();
+                    break;
+                default:
+                    break;
+            }
+
         }
-        if (other.TryGetComponent(out Wall wall))
-        {
-            SetReward(-1f);
-            floorRenderer.material = loseMaterial;
-            EndEpisode();
-        }
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        //if (collision.gameObject.TryGetComponent(out Wall wall))
+        //{
+        //    SetReward(-1f);
+        //    floorRenderer.material = loseMaterial;
+        //    EndEpisode();
+        //}
     }
 
 }

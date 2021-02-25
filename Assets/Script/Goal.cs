@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Goal : MonoBehaviour
 {
+
+    public ValueCheckpoint value;
     // Start is called before the first frame update
     void Start()
     {
@@ -15,4 +17,12 @@ public class Goal : MonoBehaviour
     {
         
     }
+}
+
+[System.Serializable]
+public enum ValueCheckpoint
+{
+    Checkpoint = 1,
+    Goal,
+
 }

@@ -30,7 +30,6 @@ public class GenerateMazeEditor : Editor
 
         if (scriptTargets.Length > 1)
         {
-            bool isAPrefab = false;
             MessageType type = MessageType.None;
             for (int i = 0; i < scriptTargets.Length; i++)
             {

@@ -32,6 +32,8 @@ public class Generator : MonoBehaviour
     private Vector3 startPosition;
     private int currentCell = 0;
     public Cell[] cells;
+    public GameObject[] checkPoints;
+    int checkPointValue = 0;
     private int totalCells;
     private int currentNeighbour = 0;
     private int backingUp = 0;
@@ -40,11 +42,13 @@ public class Generator : MonoBehaviour
     public float scale = 5f;
     public GameObject startDummie;
     public GameObject endDummie;
+    public GameObject checkDummie;
     int destruyendo;
     [SerializeField] Vector3 initialPosition;
     public GameObject groundObject;
     public bool easyEnd;
     public bool moveStartEnd = false;
+    public bool showCheckPoints = true;
     private void Start()
     {
 
@@ -80,7 +84,7 @@ public class Generator : MonoBehaviour
     public void GenerateNewMaze()
     {
 
-      //  Debug.Log(wallHolder.transform.childCount);
+        //  Debug.Log(wallHolder.transform.childCount);
 
         //Finding the parent object of the walls if exists
         destruyendo = 0;
@@ -144,14 +148,14 @@ public class Generator : MonoBehaviour
 
 
             Debug.Log("Creando nuevo laberinto");
-
+            DestroyCheks();
             //for creating columns	
             for (int a = 0; a < row; a++)
             {
                 for (int b = 0; b <= column; b++)
                 {
 
-                    myPos = new Vector3(startPosition.x + (b * wallLength) - wallLength / 2, 0.0f, startPosition.z + (a * wallLength) - wallLength / 2);
+                    myPos = new Vector3(startPosition.x + (b * wallLength) - wallLength / 2, startPosition.y, startPosition.z + (a * wallLength) - wallLength / 2);
                     tempWall = Instantiate(wall, myPos, Quaternion.identity) as GameObject;
                     tempWall.name = "column " + a + "," + b;
                     tempWall.transform.parent = wallHolder.transform;
@@ -164,7 +168,7 @@ public class Generator : MonoBehaviour
             {
                 for (int b = 0; b < column; b++)
                 {
-                    myPos = new Vector3(startPosition.x + (b * wallLength), 0.0f, startPosition.z + (a * wallLength) - wallLength);
+                    myPos = new Vector3(startPosition.x + (b * wallLength), startPosition.y, startPosition.z + (a * wallLength) - wallLength);
                     tempWall = Instantiate(wall, myPos, Quaternion.Euler(0, 90, 0)) as GameObject;
                     tempWall.name = "row " + a + "," + b;
                     tempWall.transform.parent = wallHolder.transform;
@@ -179,6 +183,16 @@ public class Generator : MonoBehaviour
         previousColumn = column;
     }
 
+    void DestroyCheks()
+    {
+
+        for (int i = 0; i < checkPoints.Length; i++)
+        {
+            DestroyImmediate(checkPoints[i].gameObject);
+        }
+
+    }
+
     /// <summary>
     /// Assigning created walls to the cells direction (north,east,west,south)
     /// </summary>
@@ -187,7 +201,24 @@ public class Generator : MonoBehaviour
         cellList = new List<int>();
         int children = wallHolder.transform.childCount;
         GameObject[] allWalls = new GameObject[children];
+
         cells = new Cell[totalCells];
+
+        if (CheckPreviousSize())
+        {
+            checkPoints = new GameObject[totalCells - 2];
+
+            for (int i = 0; i < checkPoints.Length; i++)
+            {
+                GameObject checkPoint = Instantiate(checkDummie, transform);
+                
+                checkPoints[i] = checkPoint;
+                checkPoints[i].SetActive(false);
+            }
+        }
+
+
+        checkPointValue = 0;
 
         int eastWestProccess = 0;
         int childProcess = 0;
@@ -351,7 +382,7 @@ public class Generator : MonoBehaviour
 
             //case 2 means east wall
             case 2:
-                if ( easyEnd)
+                if (easyEnd)
                     position = cells[currentCell].east.transform.localPosition;
                 else
                     position = cells[currentCell].east.transform.localPosition - (Vector3.left / 2);
@@ -390,12 +421,16 @@ public class Generator : MonoBehaviour
             {
                 startDummie.transform.localPosition = (position * scale);
             }
-
-            //if(destruyendo == 2)
-            if (destruyendo == totalCells - 1)
+            else if (destruyendo == totalCells - 1)
             {
                 //Debug.Log("Valor "+ destruyendo);
                 endDummie.transform.localPosition = position * scale;
+            }
+            else if (showCheckPoints)
+            {         
+                checkPoints[checkPointValue].SetActive(true);
+                checkPoints[checkPointValue].transform.localPosition = position * scale;
+                checkPointValue++;
             }
 
         }
