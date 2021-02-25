@@ -10,7 +10,7 @@ using Unity.MLAgents.Actuators;
 public class MazeAgent : Agent
 {
 
-    [SerializeField] float moveSpeed;
+    [SerializeField] [Range(0.1f, 1f)]float moveSpeed = 0.5f;
 
     public Material winMaterial;
     public Material loseMaterial;
@@ -39,13 +39,15 @@ public class MazeAgent : Agent
         if (regenerateMaze)
             mazeGenerator.GenerateNewMaze();
 
+        m_AgentRb.velocity = Vector3.zero;
+        transform.rotation = Quaternion.Euler(new Vector3(0f, Random.Range(0, 360)));
 
         Vector2 randomV = Random.insideUnitCircle;
         //transform.localPosition = Vector3.zero;
         transform.localPosition = mazeGenerator.startDummie.transform.localPosition + new Vector3(randomV.x, 0f, randomV.y);
         randomV = Random.insideUnitCircle;
         goalPosition = mazeGenerator.endDummie.transform.localPosition + new Vector3(randomV.x, 0f, randomV.y);
-        //mazeGenerator.endDummie.transform.localPosition = goalPosition;
+        mazeGenerator.endDummie.transform.localPosition = goalPosition;
         //targetTransform.localPosition = new Vector3(Random.Range(0f, 9f), 1.5f, Random.Range(-9f, 9f));
     }
 
@@ -133,7 +135,7 @@ public class MazeAgent : Agent
                 break;
         }
         transform.Rotate(rotateDir, Time.deltaTime * 100f);
-        m_AgentRb.AddForce(dirToGo, ForceMode.VelocityChange);
+        m_AgentRb.AddForce(dirToGo * moveSpeed, ForceMode.VelocityChange);
     }
     private void OnTriggerEnter(Collider other)
     {
@@ -160,12 +162,12 @@ public class MazeAgent : Agent
 
     private void OnCollisionEnter(Collision collision)
     {
-        //if (collision.gameObject.TryGetComponent(out Wall wall))
-        //{
-        //    SetReward(-1f);
-        //    floorRenderer.material = loseMaterial;
-        //    EndEpisode();
-        //}
+        if (collision.gameObject.TryGetComponent(out Wall wall))
+        {
+            SetReward(-1f);
+            floorRenderer.material = loseMaterial;
+            EndEpisode();
+        }
     }
 
 }

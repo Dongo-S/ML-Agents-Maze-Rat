@@ -537,7 +537,7 @@ MonoBehaviour:
     maxStep: 0
   hasUpgradedFromAgentParameters: 1
   MaxStep: 3000
-  moveSpeed: 1
+  moveSpeed: 0.5
   winMaterial: {fileID: 2100000, guid: 3839683d13eca5948915604c0467181f, type: 2}
   loseMaterial: {fileID: 2100000, guid: 010938a76947a8248a89747b390a3f1f, type: 2}
   loseTimeMaterial: {fileID: 2100000, guid: 483fc4882f43c874cbb3824a8a630a6f, type: 2}
