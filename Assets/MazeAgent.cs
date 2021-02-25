@@ -47,7 +47,8 @@ public class MazeAgent : Agent
         transform.localPosition = mazeGenerator.startDummie.transform.localPosition + new Vector3(randomV.x, 0f, randomV.y);
         randomV = Random.insideUnitCircle;
         goalPosition = mazeGenerator.endDummie.transform.localPosition + new Vector3(randomV.x, 0f, randomV.y);
-        mazeGenerator.endDummie.transform.localPosition = goalPosition;
+        if (regenerateMaze)
+            mazeGenerator.endDummie.transform.localPosition = goalPosition;
         //targetTransform.localPosition = new Vector3(Random.Range(0f, 9f), 1.5f, Random.Range(-9f, 9f));
     }
 
