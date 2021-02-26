@@ -8,12 +8,14 @@ I followed this tutorial: [How to use Machine Learning AI in Unity! (ML-Agents).
 
 Made in Unity 2020.2.4f.
 
-Alpha 1: TimeScale = 1
-Alpha 2: TimeScale = 5
-Alpha 3: TimeScale = 10
-...
-Alpha 9: TimeScale = 45
-Alpha 0: TimeScale *= 2
+Currently the best NN Model is AgenteLaboratorio-17, 
+
+Alpha 1: TimeScale = 1</br>
+Alpha 2: TimeScale = 5</br>
+Alpha 3: TimeScale = 10</br>
+...</br>
+Alpha 9: TimeScale = 45</br>
+Alpha 0: TimeScale *= 2</br>
 
 
 ## Notes
@@ -60,7 +62,7 @@ MazeAgent-07 Laberinto aleatorio, penalización por chocar con pared. Penalizaci
 
 
 ## Credits
-The Maze generator algorithm is from [Perfect-Maze-Generator-Unity3d](https://github.com/orifmilod/Perfect-Maze-Generator-Unity3d) with modifications to meet my needs.
+The Maze generator algorithm is from [Perfect-Maze-Generator-Unity3d](https://github.com/orifmilod/Perfect-Maze-Generator-Unity3d) with modifications/optimizations to fit my needs.
 
 The Assets/SharedAssets folders is from the ML-Agents toolkit.
 
