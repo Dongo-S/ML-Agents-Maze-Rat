@@ -47,10 +47,10 @@ MazeAgent-07 Laberinto aleatorio, penalización por chocar con pared. Penalizaci
 -11 -> -12 Completa laberinto 2x2 aleatorio.</br>
 -12 -> -13 Laberinto aleatorio 3x2, algunos agentes lo resuelven otros fallan, hay 4 agentes con 2x2. Al finalizar la mayoría lo completa pero aún hay alguna que otra falla.</br>
 -13 -> -14 Un laberinto aleatorio de 5x5, dos de 2x2, diez de 3x4, diez de 4x3, cinco de 3x5 y cinco de 5x3.</br>
-  Muchos fallos al inicio, pero uno que otro logra completarlos.</br>
-  Fallos por tiempo, tal vez aumentar el número máximo de pasos por agente.</br>
-  168000 pasos, 5x5 no completado, choque con pared. Todos los demás al menos una vez han sido completodos.</br>
-  324000 pasos, las recompensas empezaron a bajar</br>
+    &nbsp;&nbsp;&nbsp;Muchos fallos al inicio, pero uno que otro logra completarlos.</br>
+    &nbsp;&nbsp;&nbsp;Fallos por tiempo, tal vez aumentar el número máximo de pasos por agente.</br>
+    &nbsp;&nbsp;&nbsp;168000 pasos, 5x5 no completado, choque con pared. Todos los demás al menos una vez han sido completodos.</br>
+    &nbsp;&nbsp;&nbsp;324000 pasos, las recompensas empezaron a bajar</br>
 
 -14 -> -15 maxSteps: 5000, desactivado el laberinto 5x5</br>
 -15 -> -16 8000000 steps</br>
