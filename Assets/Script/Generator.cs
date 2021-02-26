@@ -4,6 +4,10 @@ using UnityEngine;
 using UnityEngine.UI;
 
 
+/// <summary>
+/// Code https://github.com/orifmilod/Perfect-Maze-Generator-Unity3d
+/// With modifications/optimizations to fit my needs
+/// </summary>
 
 
 [System.Serializable]
