@@ -100,7 +100,7 @@ public class TimeScalePrinter : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.Alpha0))
         {
-            Time.timeScale = 45f;
+            Time.timeScale *= 2f;
             textScale.text = "Time Scale: " + Time.timeScale;
         }
 
