@@ -60,7 +60,7 @@ MazeAgent-07 Laberinto aleatorio, penalización por chocar con pared. Penalizaci
 
 
 ## Credits
-The Maze generator algorithm is from [Perfect-Maze-Generator-Unity3d](https://github.com/orifmilod/Perfect-Maze-Generator-Unity3d) with modifications to meet my needs.
+The Maze generator algorithm is from [Perfect-Maze-Generator-Unity3d](https://github.com/orifmilod/Perfect-Maze-Generator-Unity3d) with modifications/optimizations to fit my needs.
 
 The Assets/SharedAssets folders is from the ML-Agents toolkit.
 
