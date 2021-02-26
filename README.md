@@ -8,6 +8,8 @@ I followed this tutorial: [How to use Machine Learning AI in Unity! (ML-Agents).
 
 Made in Unity 2020.2.4f.
 
+Currently the best NN Model is AgenteLaboratorio-17, 
+
 Alpha 1: TimeScale = 1</br>
 Alpha 2: TimeScale = 5</br>
 Alpha 3: TimeScale = 10</br>
