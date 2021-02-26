@@ -27,6 +27,8 @@ public class MazeAgent : Agent
 
     Rigidbody m_AgentRb;
 
+    public TimeScalePrinter winRateText;
+
     private void Start()
     {
         rewardPenalty = 1f / MaxStep;
@@ -76,6 +78,7 @@ public class MazeAgent : Agent
         {
             //SetReward(-1f);
             floorRenderer.material = loseTimeMaterial;
+            winRateText.AddLose();
             //EndEpisode();
         }
 
@@ -152,6 +155,7 @@ public class MazeAgent : Agent
                 case ValueCheckpoint.Goal:
                     SetReward(2f);
                     floorRenderer.material = winMaterial;
+                    winRateText.AddWin();
                     EndEpisode();
                     break;
                 default:
@@ -167,6 +171,7 @@ public class MazeAgent : Agent
         {
             SetReward(-1f);
             floorRenderer.material = loseMaterial;
+            winRateText.AddLose();
             EndEpisode();
         }
     }

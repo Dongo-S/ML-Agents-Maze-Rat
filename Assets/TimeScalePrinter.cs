@@ -8,6 +8,39 @@ public class TimeScalePrinter : MonoBehaviour
 
     public int timeScale;
     public bool ignoreInt;
+    [Space]
+    public UnityEngine.UI.Text winRateText;
+    int wins;
+    int loses;
+    public void AddWin()
+    {
+        wins++;
+        SetWinRate();
+    }
+
+
+    public void AddLose()
+    {
+        loses++;
+
+        SetWinRate();
+    }
+
+
+    void SetWinRate()
+    {
+        winRateText.text = string.Format("Win rate: {0:0.00}%", ((float)wins / (wins + loses) * 100f));
+        
+    }
+    private void Awake()
+    {
+        MazeAgent[] agents = FindObjectsOfType(typeof(MazeAgent)) as MazeAgent[];
+
+        for (int i = 0; i < agents.Length; i++)
+        {
+            agents[i].winRateText = this;
+        }
+    }
 
     private void Start()
     {
